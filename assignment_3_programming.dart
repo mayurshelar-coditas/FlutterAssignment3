@@ -1,5 +1,7 @@
 import 'dart:collection';
 import 'dart:math';
+import 'tree_node.dart';
+import 'merge_sort.dart';
 
 void main() {
   //Question 1.
@@ -12,9 +14,9 @@ void main() {
   twoSum([3, 2, 4], 6); //Output - [1, 2]
 
   //Question 3.
-  print(getLongestPrefix(["flower", "flow", "flight"]));
+  print(getLongestCommonPrefix(["flower", "flow", "flight"]));
 
-  print(getLongestPrefix(["dog", "racecar", "car"]));
+  print(getLongestCommonPrefix(["dog", "racecar", "car"]));
 
   //Question 4.
   print(lengthOfLongestSubstring("abcabcbb")); //Output - 3
@@ -33,7 +35,7 @@ void main() {
   //Question 7.
   TreeNode head = TreeNode(1, TreeNode(2, TreeNode(3), TreeNode(4)),
       TreeNode(5, TreeNode(6), TreeNode(7)));
-  inorderTraversal(head);
+  inOrderTraversal(head);
 
   //Question 8.
   print(convertToRomanNumber(1994)); //Output - MCMXCIV.
@@ -66,16 +68,14 @@ Output: [4,9,9,49,121]
 Appraoch.
 First I'll traverse the array, using a loop, to make the changes inplace and then make use of sort() function to return the
 array in non-decreasing order
-Note: Using an efficent algoritm like MergeSort or QuickSort is beneficial but for time being, for logic illustration,
-      I'll make use of dart's inbuilt sort.
       
 Solution -      */
 
 void squareAndSortArray(List<int> numbersArray) {
   for (int number = 0; number < numbersArray.length; number++) {
-    numbersArray[number] = pow(numbersArray[number], 2).toInt();
+    numbersArray[number] = numbersArray[number] * numbersArray[number];
   }
-  numbersArray.sort();
+  mergeSort(numbersArray, 0, numbersArray.length - 1);
 }
 
 // ========================================================================
@@ -116,7 +116,7 @@ void twoSum(List<int> numbersArray, int target) {
     indicesAndElements.addAll({numbersArray[number]: number});
   }
 
-  numbersArray.sort();
+  mergeSort(numbersArray, 0, numbersArray.length - 1);
   while (firstPointer != secondPointer) {
     int currentSum = numbersArray[firstPointer] + numbersArray[secondPointer];
     if (currentSum == target) {
@@ -157,14 +157,14 @@ Explanation: There is no common prefix among the input strings.
 Approach - First I will the sort the array, then I will compare first and last string of the array as both of them will have the least common prefix and if both of these have a common prefix then other string in the array will also have altleast a prefix that is common in both of these.
 
 Solution - */
-String getLongestPrefix(List<String> array) {
+String getLongestCommonPrefix(List<String> array) {
   array.sort();
 
   StringBuffer prefix = StringBuffer();
-  int iteration = 0;
-  while (iteration < array[0].length &&
-      array[0][iteration] == array[array.length - 1][iteration]) {
-    prefix.write(array[0][iteration++]);
+  int currentChar = 0;
+  while (currentChar < array[0].length &&
+      array[0][currentChar] == array[array.length - 1][currentChar]) {
+    prefix.write(array[0][currentChar++]);
   }
 
   return prefix.toString();
@@ -229,22 +229,23 @@ Input: nums1 = [4,9,5], nums2 = [9,4,9,8,4]
 Output: [4,9]
 Explanation: [9,4] is also accepted. */
 
-List<int> getIntersection(List<int> nums1, List<int> nums2) {
-  int nums1Iterator = 0, nums2Iterator = 0;
+List<int> getIntersection(List<int> firstList, List<int> secondList) {
+  int firstListIterator = 0, secondListIterator = 0;
   List<int> intersectionSet = [];
 
-  nums1.sort();
-  nums2.sort();
+  mergeSort(firstList, 0, firstList.length - 1);
+  mergeSort(secondList, 0, secondList.length - 1);
 
-  while (nums1Iterator < nums1.length && nums2Iterator < nums2.length) {
-    if (nums1[nums1Iterator] == nums2[nums2Iterator]) {
-      intersectionSet.add(nums1[nums1Iterator]);
-      nums1Iterator++;
-      nums2Iterator++;
-    } else if (nums1[nums1Iterator] > nums2[nums2Iterator]) {
-      nums2Iterator++;
+  while (firstListIterator < firstList.length &&
+      secondListIterator < secondList.length) {
+    if (firstList[firstListIterator] == secondList[secondListIterator]) {
+      intersectionSet.add(firstList[firstListIterator]);
+      firstListIterator++;
+      secondListIterator++;
+    } else if (firstList[firstListIterator] > secondList[secondListIterator]) {
+      secondListIterator++;
     } else {
-      nums1Iterator++;
+      firstListIterator++;
     }
   }
 
@@ -269,14 +270,18 @@ Approach - 1. First I'll check length of both is same or not, bcoz if length its
 
 bool isAnagram(String s, String t) {
   if (s.length == t.length) {
-    /*Converting to lowercase to handle case sentivity.
+    /*1st Approach 
+    
+    Converting to lowercase to handle case sentivity.
     List<String> arrayOfStringS = s.toLowerCase().split("");
     List<String> arrayOfStringT = t.toLowerCase().split("");
 
     arrayOfStringS.sort();
     arrayOfStringT.sort();
 
-    return arrayOfStringS.join("") == arrayOfStringT.join();*/
+    return arrayOfStringS.join("") == arrayOfStringT.join();
+    
+    */
 
     s = s.toLowerCase();
     t = t.toLowerCase();
@@ -308,21 +313,14 @@ bool isAnagram(String s, String t) {
       
 Solution - */
 
-class TreeNode {
-  int val;
-  TreeNode? left;
-  TreeNode? right;
-  TreeNode([this.val = 0, this.left, this.right]);
-}
-
-void inorderTraversal(TreeNode? node) {
+void inOrderTraversal(TreeNode? node) {
   if (node == null) {
     return;
   }
 
-  inorderTraversal(node.left);
+  inOrderTraversal(node.left);
   print(node.val);
-  inorderTraversal(node.right);
+  inOrderTraversal(node.right);
 }
 
 // ========================================================================
