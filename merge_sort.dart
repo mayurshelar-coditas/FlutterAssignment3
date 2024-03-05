@@ -10,11 +10,11 @@ void mergeSort(List<int> array, int leftIndex, int rightIndex) {
 }
 
 void merge(List<int> array, int leftIndex, int middle, int rightIndex) {
-  int n1 = middle - leftIndex + 1;
-  int n2 = rightIndex - middle;
+  final int n1 = middle - leftIndex + 1;
+  final int n2 = rightIndex - middle;
 
-  List<int> L = List.filled(n1, 0);
-  List<int> R = List.filled(n2, 0);
+  final List<int> L = List.filled(n1, 0);
+  final List<int> R = List.filled(n2, 0);
 
   for (int i = 0; i < n1; i++) {
     L[i] = array[leftIndex + i];

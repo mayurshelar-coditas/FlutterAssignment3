@@ -5,9 +5,7 @@ import 'merge_sort.dart';
 
 void main() {
   //Question 1.
-  List<int> numbersArray = [-4, -1, 0, 3, 10];
-  squareAndSortArray(numbersArray);
-  print(numbersArray); //Output - [0, 1, 9, 16, 100]
+  print(squareAndSortArray([-4, -1, 0, 3, 10])); //Output - [0, 1, 9, 16, 100]
 
   //Question 2.
   twoSum([2, 7, 11, 15], 9); //Output - [0, 1]
@@ -71,11 +69,12 @@ array in non-decreasing order
       
 Solution -      */
 
-void squareAndSortArray(List<int> numbersArray) {
+List<int> squareAndSortArray(List<int> numbersArray) {
   for (int number = 0; number < numbersArray.length; number++) {
     numbersArray[number] = numbersArray[number] * numbersArray[number];
   }
   mergeSort(numbersArray, 0, numbersArray.length - 1);
+  return numbersArray;
 }
 
 // ========================================================================
@@ -194,7 +193,7 @@ Notice that the answer must be a substring, "pwke" is a subsequence and not a su
 
 //Solution -
 int lengthOfLongestSubstring(String s) {
-  Set<String> set = <String>{};
+  final Set<String> set = <String>{};
   int maxLength = 0;
   int left = 0;
   for (int right = 0; right < s.length; right++) {
@@ -231,7 +230,7 @@ Explanation: [9,4] is also accepted. */
 
 List<int> getIntersection(List<int> firstList, List<int> secondList) {
   int firstListIterator = 0, secondListIterator = 0;
-  List<int> intersectionSet = [];
+  final List<int> intersectionSet = [];
 
   mergeSort(firstList, 0, firstList.length - 1);
   mergeSort(secondList, 0, secondList.length - 1);
@@ -286,8 +285,8 @@ bool isAnagram(String s, String t) {
     s = s.toLowerCase();
     t = t.toLowerCase();
 
-    List<int> letterFrequencyForS = List.filled(26, 0);
-    List<int> letterFrequencyForT = List.filled(26, 0);
+    final List<int> letterFrequencyForS = List.filled(26, 0);
+    final List<int> letterFrequencyForT = List.filled(26, 0);
 
     for (int character = 0; character < s.length; character++) {
       letterFrequencyForT[t.codeUnitAt(character) - 'a'.codeUnitAt(0)]++;
@@ -496,7 +495,7 @@ Approach - 1. Convert the String of words into array of words. Then reverse that
 Solution - */
 
 String reverseWordsInAString(String words) {
-  List<String> listOfWords = words.trim().split(" ");
+  final List<String> listOfWords = words.trim().split(" ");
 
   for (int word = 0; word < listOfWords.length / 2; word++) {
     String word1 = listOfWords[word];
@@ -531,13 +530,13 @@ Approach -
 */
 
 String removeDuplicateLetters(String s) {
-  List<int> lastIndex = List.filled(26, 0);
+  final List<int> lastIndex = List.filled(26, 0);
   for (int i = 0; i < s.length; i++) {
     lastIndex[s.codeUnitAt(i) - 'a'.codeUnitAt(0)] = i;
   }
 
-  List<bool> seen = List.filled(26, false);
-  List<int> stack = [];
+  final List<bool> seen = List.filled(26, false);
+  final List<int> stack = [];
 
   for (int i = 0; i < s.length; i++) {
     int currentCharacter = s.codeUnitAt(i) - 'a'.codeUnitAt(0);
